@@ -1,0 +1,16 @@
+<h2>Libros leídos</h2>
+
+@if (libros.length > 0) {
+  <div>
+    @for (libro of libros; track libro) {
+      <div class="libro-card">
+        <h3>{{ libro.titulo }}</h3>
+        <p>Autor: {{ libro.autor }}</p>
+        <p>Páginas: {{ libro.paginas }}</p>
+        <p>Fecha de inserción: {{ libro.fecha_insercion }}</p>
+      </div>
+    }
+  </div>
+} @else {
+  <p>No hay libros leídos.</p>
+}
