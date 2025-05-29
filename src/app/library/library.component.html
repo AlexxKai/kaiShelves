@@ -1,0 +1,69 @@
+<div class="library-container">
+  <div #threeContainer class="three-container"></div>
+
+  <div class="navigation-panel">
+    <h2 class="panel-title">Virtual library</h2>
+    <div class="navigation-buttons">
+      @for (section of navigationSections; track section.id) {
+      <button (click)="navigateToSection(section.id)"
+        [class]="'nav-button ' + (currentSection() === section.id ? 'active' : '')">
+        {{section.icon}} {{section.name}}
+      </button>
+      }
+    </div>
+  </div>
+
+  <div class="genres-panel">
+    <h3 class="panel-title">Genres by bookshelve color:</h3>
+    <div class="genres-grid">
+      @for (genre of genres; track genre.id) {
+      <div class="genre-item" [style.background-color]="getGenreColor(genre.color)">
+        {{genre.name}}
+      </div>
+      }
+    </div>
+    <p class="help-text">
+      Click on a bookshelve to explore
+    </p>
+  </div>
+
+  <div class="controls-panel">
+    <p class="controls-text">
+      Move mouse to move around<br />
+      Click to see genre
+    </p>
+  </div>
+
+  @if (showGenreMenu()) {
+  <div class="modal-overlay" (click)="closeGenreMenu()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3 class="modal-title">📖 Section: {{selectedGenre()}}</h3>
+      <p class="modal-description">
+        Section: {{selectedGenre()}}. 
+      </p>
+      <div class="modal-buttons">
+        <button class="modal-button catalog-button" (click)="showCatalog()">
+          See catalog
+        </button>
+        <button class="modal-button search-button" (click)="searchBooks()">
+          Search book
+        </button>
+        <button class="modal-button close-button" (click)="closeGenreMenu()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <div class="info-panel">
+    <div class="info-item">
+      <span class="info-label">Current section:</span>
+      <span class="info-value">{{getCurrentSectionName()}}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Total genres:</span>
+      <span class="info-value">{{genres.length}}</span>
+    </div>
+  </div>
+</div>

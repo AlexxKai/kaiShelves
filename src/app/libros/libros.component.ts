@@ -39,10 +39,12 @@ export class LibrosComponent implements OnInit {
   cambioDetalles(libro: Libro) {
     this.ruta.navigate(['/libros/detalles', 
       { 
+        isbn: libro.isbn,
         titulo: libro.titulo,
         autor: libro.autor,
-        fecha_publicacion: libro.fecha_publicacion,
         editorial: libro.editorial,
+        genero: libro.genero,
+        fecha_publicacion: libro.fecha_publicacion,
         paginas: libro.paginas,      }
     ]);
   }

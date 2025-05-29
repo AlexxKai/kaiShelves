@@ -16,10 +16,12 @@ export class DetallesComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.libro = {
+        isbn: params.get('isbn') || '',
         titulo: params.get('titulo') || '',
         autor: params.get('autor') || '',
-        fecha_publicacion: Number(params.get('fecha_publicacion')),
         editorial: params.get('editorial') || '',
+        genero: params.get('genero') || '',
+        fecha_publicacion: Number(params.get('fecha_publicacion')),
         paginas: Number(params.get('paginas'))
       };
 
