@@ -1,0 +1,117 @@
+<div class="library-container">
+    <div #threeContainer class="three-container"></div>
+
+    <div class="navigation-panel">
+        <h2 class="panel-title">Kai Shelves</h2>
+        <div class="navigation-buttons">
+            @for (section of navigationSections; track section.id) {
+            <button (click)="navigateToSection(section.id)"
+                [class]="'nav-button ' + (currentSection() === section.id ? 'active' : '')">
+                {{section.icon}} {{section.name}}
+            </button>
+            }
+        </div>
+    </div>
+
+    <div class="controls-panel">
+        <p class="controls-text">
+            Move mouse to move around<br />
+        </p>
+    </div>
+
+    <div class="info-panel">
+        <div class="info-item">
+            <span class="info-label">Current section:</span>
+            <span class="info-value">{{getCurrentSectionName()}}</span>
+        </div>
+    </div>
+
+    <div class="login-panel">
+        <button class="login-button" (click)="openLogin()">Login</button>
+        <button class="register-button" (click)="openRegister()">Register</button>
+    </div>
+
+    <!-- Modal de Login -->
+    @if (showLogin()) {
+    <div class="modal-overlay" (click)="closeLogin()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3 class="modal-title">Iniciar Sesión</h3>
+            <button class="modal-button close-button" (click)="closeLogin()">X</button>
+            <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+                <div class="mb-3">
+                    <label for="usuario" class="form-label">Correo electrónico o usuario:</label>
+                    <input type="text" id="usuario" class="form-control" formControlName="usuario"
+                        placeholder="Email o usuario" required>
+                </div>
+                <div class="mb-3">
+                    <label for="passw" class="form-label">Ingrese su contraseña:</label>
+                    <input type="password" class="form-control" id="passw" formControlName="passw" placeholder="passw"
+                        required>
+                </div>
+                <button class="modal-button" type="submit" [disabled]="!loginForm.valid">Iniciar
+                    sesión</button><!-- class="btn btn-info" -->
+            </form>
+            <div class="switch-form">
+                ¿No tienes cuenta?
+                <button class="link-button" (click)="openRegister()">Regístrate aquí</button>
+            </div>
+        </div>
+    </div>
+    }
+
+    @if (showRegister()) {
+    <div class="modal-overlay" (click)="closeRegister()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3 class="modal-title">Regístrate</h3>
+            <button class="modal-button close-button" (click)="closeRegister()">X</button>
+            <form [formGroup]="formularioRegistro" (ngSubmit)="submit()">
+                <div class="mb-3">
+                    <label for="identifier" class="form-label">Nombre de usuario:</label>
+                    <input type="text" formControlName="usuario" required placeholder="nombre de usuario">
+                    @if(this.formularioRegistro.get('usuario')?.errors?.['required']) {
+                    <span> *</span>
+                    }
+                    @if(this.formularioRegistro.get('usuario')?.errors?.['minlength']) {
+                    <br>
+                    <p class="mensaje">(Debe tener como mínimo 3 caracteres)</p>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Ingrese su email:</label>
+
+                    <input type="text" formControlName="email" placeholder="email">
+                    @if(this.formularioRegistro.get('email')?.errors?.['required']) {
+                    <span> *</span>
+                    }
+                    @if(this.formularioRegistro.get('email')?.errors?.['email']) {
+                    <br>
+                    <p class="mensaje">(El email no es válido)</p>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <label for="passw" class="form-label">Ingrese su passw:</label>
+                    <input type="password" formControlName="passw" placeholder="passw">
+                    @if(this.formularioRegistro.get('passw')?.errors?.['required']) {
+                    <span> *</span>
+                    }
+                    @if(this.formularioRegistro.get('passw')?.errors?.['comprobar']) {
+                    <br>
+                    <p class="mensaje">(Mínimo 8 caracteres, de los cuales un número y una mayúscula)</p>
+                    }
+                </div>
+
+                <button class="modal-button" type="submit" [disabled]="formularioRegistro.invalid">Confirmar</button>
+                <button class="modal-button" type="reset" (click)="reset()">Borrar</button>
+
+            </form>
+            <div class="resultado">{{resultado}}</div>
+            <div class="switch-form">
+                ¿Ya tienes cuenta?
+                <button class="link-button" (click)="openLogin()">Inicia sesión aquí</button>
+            </div>
+        </div>
+    </div>
+    }
+    <router-outlet />

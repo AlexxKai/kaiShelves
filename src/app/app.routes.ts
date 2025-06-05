@@ -1,15 +1,16 @@
 import { Routes } from '@angular/router';
 import { LibrosComponent } from './libros/libros.component';
 import { DetallesComponent } from './libros/detalles/detalles.component';
-import { LoginComponent } from './login/login.component';
-import { RegistroComponent } from './login/registro/registro.component';
 import { ErrorComponent } from './error/error.component';
 import { ListaComponent } from './lista/lista.component';
+import { RegisterComponent } from './register/register.component';
+import { LibraryComponent } from './library/library.component';
+
 
 export const routes: Routes = [
     {
         path: '',
-        component: LibrosComponent
+        component: LibraryComponent
     },
     {
         path: 'libros',
@@ -21,17 +22,12 @@ export const routes: Routes = [
             }]
     },
     {
-        path: 'login',
-        component: LoginComponent,
-        children: [
-            {
-                path: 'registro',
-                component: RegistroComponent
-            }]
+        path: 'register',
+        component: RegisterComponent,
     },
     {
-        path:'lista',
-        component:ListaComponent
+        path: 'lista',
+        component: ListaComponent
     },
     {
         path: 'error',
