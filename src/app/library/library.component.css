@@ -279,3 +279,48 @@
         grid-template-columns: 1fr;
     }
 }
+
+.books-container {
+  max-height: 400px;      /* Ajusta la altura máxima según tu diseño */
+  overflow-y: auto;       /* Muestra scroll vertical solo si es necesario */
+  padding-right: 8px;     /* Opcional: espacio para el scroll */
+  margin-bottom: 1rem;
+  border: 1px solid #ddd; /* Opcional: para resaltar el área scrollable */
+  background: linear-gradient(120deg, #fffbe5 0%, #f9e7c2 100%);
+  
+  max-height: 400px;      /* Ajusta la altura máxima según tu diseño */
+  overflow-y: auto;       /* Muestra scroll vertical solo si es necesario */
+  padding-right: 8px;     /* Opcional: espacio para el scroll */
+  padding: 2.2rem 2rem;
+  margin-bottom: 1rem;
+  border: 2px solid #b08d57;
+  color: #7a5c2e;
+  box-shadow: 0 25px 50px rgba(176, 141, 87, 0.25);
+  animation: slideUp 0.3s ease;
+  border-radius: 8px;
+}
+
+.books-container::-webkit-scrollbar {
+  width: 10px;
+  background: #f0f0f0;
+}
+
+.books-container::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 8px;
+  border: 2px solid #f0f0f0;
+  transition: background 0.3s;
+}
+
+.books-container::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
+}
+
+.books-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+.books-container::-webkit-scrollbar-corner {
+  background: #f0f0f0;
+}

@@ -56,6 +56,50 @@
   </div>
   }
 
+
+  <!-- Catálogo-->
+@if (showCatalogView()) {
+  <div class="modal-overlay" (click)="closeCatalog()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3 class="modal-title">📚 Catalog: {{selectedGenre()}}</h3>
+      <div class="books-container">
+        @for (book of books(); track book.isbn) {
+          <div class="book-card">
+            <img [src]="book.imagen || 'assets/default-book.png'" alt="Portada">
+            <h4>{{book.titulo}}</h4>
+            <p>Author: {{book.autor}}</p>
+            <p>Year: {{book.fecha_publicacion}}</p>
+            <button (click)="showBookDetails(book)">Details</button>
+          </div>
+        }
+      </div>
+      <button class="modal-button close-button" (click)="closeCatalog()">Close</button>
+    </div>
+  </div>
+}
+
+<!-- buscador -->
+@if (showSearchView()) {
+  <div class="modal-overlay" (click)="closeSearch()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3 class="modal-title">🔍 Search: {{selectedGenre()}}</h3>
+      <input type="text" #searchInput placeholder="Type book title or author..." (keyup.enter)="searchBooks(searchInput.value)">
+      <div class="books-container">
+        @for (book of searchResults(); track book.isbn) {
+          <div class="book-card">
+            <img [src]="book.imagen || 'assets/default-book.png'" alt="Portada">
+            <h4>{{book.titulo}}</h4>
+            <p>Author: {{book.autor}}</p>
+            <p>Year: {{book.fecha_publicacion}}</p>
+            <button (click)="showBookDetails(book)">Details</button>
+          </div>
+        }
+      </div>
+      <button class="modal-button close-button" (click)="closeSearch()">Close</button>
+    </div>
+  </div>
+}
+
   <div class="info-panel">
     <div class="info-item">
       <span class="info-label">Current section:</span>

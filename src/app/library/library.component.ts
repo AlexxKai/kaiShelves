@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { DatosService } from '../datos.service';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
 
 interface Genre {
   id: string;
@@ -23,6 +25,9 @@ interface NavigationSection {
   styleUrl: './library.component.css'
 })
 export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
+  private datosService = inject(DatosService);
+  private router = inject(Router);
+
   @ViewChild('threeContainer', { static: true }) threeContainer!: ElementRef;
   controls!: OrbitControls;
 
@@ -41,6 +46,8 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
   private animationFrameId!: number;
 
   readonly navigationSections: NavigationSection[] = [
+    { id: 'inicio', name: 'Inicio', icon: '🏠' },
+    { id: 'register', name: 'Register', icon: '📝🔑' },
     { id: 'entrance', name: 'Entrance', icon: '🚪' },
     { id: 'center', name: 'Centre', icon: '🏛️' },
     { id: 'left', name: 'Left zone', icon: '⬅️' },
@@ -48,16 +55,16 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   readonly genres: Genre[] = [
-    { id: 'Ciencia Ficción', name: 'Science Fiction', color: 0xff6b6b, position: { x: -10, z: -5 } },
-    { id: 'Fantasía', name: 'Fantasy', color: 0x4ecdc4, position: { x: 0, z: -5 } },
+    { id: 'Science Fiction', name: 'Science Fiction', color: 0xff6b6b, position: { x: -10, z: -5 } },
+    { id: 'Fantasy', name: 'Fantasy', color: 0x4ecdc4, position: { x: 0, z: -5 } },
     { id: 'Misterio', name: 'Mystery', color: 0x45b7d1, position: { x: 10, z: -5 } },
-    { id: 'Novela', name: 'Novel', color: 0xf9ca24, position: { x: -10, z: 5 } },
-    { id: 'Filosofía', name: 'Filosophy', color: 0xa55eea, position: { x: 0, z: 5 } },
-    { id: 'Aventura', name: 'Adventure', color: 0xfd79a8, position: { x: 10, z: 5 } }
+    { id: 'Novel', name: 'Novel', color: 0xf9ca24, position: { x: -10, z: 5 } },
+    { id: 'Filosophy', name: 'Filosophy', color: 0xa55eea, position: { x: 0, z: 5 } },
+    { id: 'Adventure', name: 'Adventure', color: 0xfd79a8, position: { x: 10, z: 5 } }
   ];
 
   ngOnInit(): void {
-    console.log('🚀 Inicializando Biblioteca Virtual Angular 19');
+    console.log('🚀 Proyecto TFG de Alex Urueña: Kai Shelves');
   }
 
   ngAfterViewInit(): void {
@@ -408,16 +415,27 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
   navigateToSection(section: string): void {
     this.currentSection.set(section);
 
-    let positions: Record<string, { x: number; y: number; z: number; targetX: number; targetY: number; targetZ: number }> = {
+    // Rutas a los componentes
+    const routes: { [key: string]: string } = {
+      'inicio': '/',
+      'register': '/register'
+    };
+
+    if (routes[section]) {
+      this.router.navigate([routes[section]]);
+      return;
+    }
+
+    // Movimiento de cámara
+    const positions = {
       'entrance': { x: 0, y: 8, z: 25, targetX: 0, targetY: 5, targetZ: 0 },
       'center': { x: 0, y: 12, z: 0, targetX: 0, targetY: 5, targetZ: 0 },
       'left': { x: -20, y: 8, z: 0, targetX: -10, targetY: 5, targetZ: 0 },
-      'right': { x: 20, y: 8, z: 0, targetX: 10, targetY: 5, targetZ: 0 }
+      'right': { x: 20, y: 8, z: 0, targetX: 10, targetY: 5, targetZ: 0 },
     };
 
-    let pos = positions[section];
-    if (pos) {
-      this.animateCameraTo(pos);
+    if (positions[section as keyof typeof positions]) {
+      this.animateCameraTo(positions[section as keyof typeof positions]);
     }
   }
 
@@ -456,11 +474,58 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
     this.selectedGenre.set('');
   }
 
+  // Señales para controlar la vista
+  showCatalogView = signal<boolean>(false);
+  showSearchView = signal<boolean>(false);
+  books = signal<any[]>([]);
+  searchResults = signal<any[]>([]);
+
+  // Método para mostrar el catálogo del género seleccionado
   showCatalog(): void {
-    alert('Not implemented yet.');
+    this.showCatalogView.set(true);
+    this.fetchBooksByGenre(this.selectedGenre());
   }
 
-  searchBooks(): void {
-    alert('Not implemented yet.');
+  // Método para buscar libros en el género seleccionado
+  searchBooks(query?: string): void {
+    this.showSearchView.set(true);
+    if (query) {
+      this.fetchBooksByGenreAndQuery(this.selectedGenre(), query);
+    } else {
+      this.searchResults.set([]);
+    }
+  }
+
+  // Métodos para cerrar las vistas
+  closeCatalog(): void {
+    this.showCatalogView.set(false);
+    this.books.set([]);
+  }
+  closeSearch(): void {
+    this.showSearchView.set(false);
+    this.searchResults.set([]);
+  }
+
+  // Métodos para obtener los datos desde el backend PHP
+  fetchBooksByGenre(genreName: string): void {
+    this.datosService.getBooksByGenre(genreName)
+      .subscribe({
+        next: (books) => this.books.set(books),
+        error: (err) => console.error('Error fetching books:', err)
+      });
+  }
+
+  fetchBooksByGenreAndQuery(genreName: string, query: string): void {
+    this.datosService.searchBooks(genreName, query)
+      .subscribe({
+        next: (books) => this.searchResults.set(books),
+        error: (err) => console.error('Error searching books:', err)
+      });
+  }
+
+  // Método para mostrar detalles de un libro (opcional)
+  showBookDetails(book: any): void {
+    // Implementa aquí la lógica para mostrar detalles del libro
+    alert(`Book: ${book.titulo}\nAuthor: ${book.autor}\nYear: ${book.fecha_publicacion}`);
   }
 }
