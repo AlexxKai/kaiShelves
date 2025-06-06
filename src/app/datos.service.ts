@@ -9,9 +9,7 @@ import { Observable } from 'rxjs';
 export class DatosService {
   url: string = "http://localhost:80/kai/"
   private apiUrl = 'http://localhost:80/kai/';
-    private http = inject(HttpClient);
-
-
+  private http = inject(HttpClient);
 
   obtenerLibros() {
     return this.http.get(`${this.url}obtenerLibros.php`);

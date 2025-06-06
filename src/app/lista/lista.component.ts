@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DatosService } from '../datos.service';
+import { RouterOutlet, RouterLinkActive, RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, RouterOutlet],
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.css'
 })

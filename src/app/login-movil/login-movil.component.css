@@ -1,26 +1,4 @@
-.libro-card {
-  display: inline-block;
-  padding: 10px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  margin: 5px;
-
-  /* Tamaño uniforme */
-  width: 200px; /* Ajusta el ancho según tus necesidades */
-  height: 300px; /* Ajusta la altura según tus necesidades */
-
-  /* Para manejar contenido desbordado */
-  overflow: hidden;
-
-  /* Opcional: Centrar contenido */
-  text-align: center;
-}
-
-
-.detalles-libro{
-    padding-left: 45%;
-}
-
+/* navbar */
 body,
 h1,
 h2,
@@ -85,4 +63,42 @@ button {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 12px;
+}
+
+/* login */
+p, form {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  a {
+    color: blue;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+
+  /* registro */
+  span {
+  color: red;
+}
+
+.mensaje {
+  font-size: 12px;
+  color: red;
+}
+
+form {
+  background-color: blanchedalmond;
+  border-radius: 1px solid #ccc;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.resultado {
+  color: green;
+  padding-right: 45%;
 }

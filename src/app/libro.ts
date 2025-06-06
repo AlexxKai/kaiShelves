@@ -6,4 +6,6 @@ export interface Libro {
   genero: string;
   fecha_publicacion: number;
   paginas: number;
+  imagen?: string; // Opcional, si se desea incluir una imagen del libro
+  pdf?: string; // Opcional, si se desea incluir una sinopsis del libro
 }

@@ -6,8 +6,8 @@ import { LibraryComponent } from './library/library.component';
 import { BookComponent } from './book/book.component';
 import { BookDetailsComponent } from './book-details/book-details.component';
 import { DeviceService } from './device.service';
-import { inject } from '@angular/core';
 import { deviceGuard } from './device.guard';
+import { LoginMovilComponent } from './login-movil/login-movil.component';
 
 export const routes: Routes = [
     {
@@ -30,6 +30,10 @@ export const routes: Routes = [
     {
         path: 'register',
         component: RegisterComponent,
+    },
+    {
+        path: 'login',
+        component: LoginMovilComponent,
     },
     {
         path: 'lista',

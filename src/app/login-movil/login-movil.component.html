@@ -1,0 +1,88 @@
+<h1 class="gradient-text">Kai Shelves</h1>
+<div class="menu">
+    <a routerLink="">Home</a>
+    <a routerLink="/books">Books</a>
+    <a routerLink="/lista">Read</a>
+</div>
+<div>
+    <button routerLink="/login">Login</button>
+</div>
+
+@if (showLogin()){
+
+<div class="container">
+    <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+        <div class="mb-3">
+            <strong>Login</strong>
+            <input type="text" id="usuario" class="form-control" formControlName="usuario" placeholder="User or email"
+                required>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" id="passw" formControlName="passw" placeholder="Password"
+                required>
+        </div>
+        <button type="submit" [disabled]="!loginForm.valid">Iniciar sesión</button><!-- class="btn btn-info" -->
+    </form>
+</div>
+<div class="switch-form">
+    ¿No tienes una cuenta?
+    <button class="link-button" (click)="openRegister()">Regístrate aquí</button>
+
+</div>
+}
+
+<!-- Container de Registro: aparece cuando showRegister() es true -->
+@if (showRegister()) {
+<div class="container">
+    <form [formGroup]="formularioRegistro" (ngSubmit)="submit()">
+        <strong>Register</strong>
+        <div class="mb-3">
+            <input type="text" formControlName="usuario" required placeholder="User name">
+            @if(this.formularioRegistro.get('usuario')?.errors?.['required']) {
+            <span> *</span>
+            }
+            @if(this.formularioRegistro.get('usuario')?.errors?.['minlength']) {
+            <br>
+            <p class="mensaje">(Debe tener como mínimo 3 caracteres)</p>
+            }
+        </div>
+
+        <div class="mb-3">
+            <input type="text" formControlName="email" placeholder="Email">
+
+            <!-- Visual validations for email -->
+            @if(this.formularioRegistro.get('email')?.errors?.['required']) {
+            <span> *</span>
+            }
+            @if(this.formularioRegistro.get('email')?.errors?.['email']) {
+            <br>
+            <p class="mensaje">(El mail no es válido)</p>
+            }
+        </div>
+
+        <div class="mb-3">
+            <input type="password" id="pwd" formControlName="passw" placeholder="Password">
+            <input type="checkbox" onclick="pwd.type=this.checked?'text':'password'">
+
+            <!-- Visual validations for password -->
+            @if(this.formularioRegistro.get('passw')?.errors?.['comprobar']) {
+            <p class="mensaje">(Minimum 8 characters, including one number and one capital letter)</p>
+            }
+        </div>
+
+        <button type="submit" [disabled]="formularioRegistro.invalid">Confirmar</button>
+        <button type="reset" (click)="reset()">Borrar</button>
+
+    </form>
+
+    <!-- Log result message -->
+    <div class="resultado">{{resultado}}</div>
+    <!-- Option to switch to login form -->
+    <div class="switch-form">
+        Already have an account?
+        <button class="link-button" (click)="openLogin()">Login here</button>
+    </div>
+</div>
+}
+
+<router-outlet />
