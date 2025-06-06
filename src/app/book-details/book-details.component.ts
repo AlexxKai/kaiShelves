@@ -8,7 +8,7 @@ import { RouterOutlet, RouterLinkActive, RouterLink, ActivatedRoute, Router } fr
   templateUrl: './book-details.component.html',
   styleUrl: './book-details.component.css'
 })
-export class BookDetailsComponent {
+export class BookDetailsComponent implements OnInit{
   libro: Libro | null = null;
 
   constructor(private route: ActivatedRoute, private router: Router) {}

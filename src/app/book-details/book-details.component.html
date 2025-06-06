@@ -1,26 +1,23 @@
 <h1 class="gradient-text">Kai Shelves</h1>
 <div class="menu">
-  <a routerLink="">Inicio</a>
-  <a routerLink="libros">Libros</a>
-  <a routerLink="lista">Leidos</a>
+  <a routerLink="">Home</a>
+  <a routerLink="/books">Books</a>
+  <a routerLink="/lista">Read</a>
 </div>
 <div>
-    <button routerLink="login">Login</button>
+  <button routerLink="login">Login</button>
 </div>
-
-<router-outlet></router-outlet>
 
 <div class="detalles-libro">
   <div class="libro-info">
     <h3>{{ libro?.titulo }}</h3>
-    <p><strong>Autor:</strong> {{ libro?.autor }}</p>
-    <p><strong>Año de publicación:</strong> {{ libro?.fecha_publicacion }}</p>
+    <p><strong>Author:</strong> {{ libro?.autor }}</p>
+    <p><strong>Year of publication:</strong> {{ libro?.fecha_publicacion }}</p>
     <p><strong>Editorial:</strong> {{ libro?.editorial }}</p>
-    <p><strong>Género:</strong> {{ libro?.genero }}</p>
-    <p><strong>Páginas:</strong> {{ libro?.paginas }}</p>
+    <p><strong>Genre:</strong> {{ libro?.genero }}</p>
+    <p><strong>Pages:</strong> {{ libro?.paginas }}</p>
     <img src="open.jpg" height="200em">
   </div>
   <br>
-    <button (click)="volver()">Volver a la lista</button>
-  </div>
-  
+  <button (click)="volver()">Back to list</button>
+</div>

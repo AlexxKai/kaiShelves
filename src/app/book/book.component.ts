@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { DatosService } from '../datos.service';
 import { Libro } from '../libro';
+import { DeviceService } from '../device.service';
 
 @Component({
   selector: 'app-book',
@@ -13,6 +14,9 @@ export class BookComponent implements OnInit{
   libros: Libro[] = [];
   mostrar = true;
   imagen=["open"]
+  private device = inject(DeviceService);
+  
+  esMovil = this.device.isMobile();
 
   constructor(private ruta: Router, private datosLibro: DatosService) {}
 

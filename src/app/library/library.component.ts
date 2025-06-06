@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { DatosService } from '../datos.service';
 import { Router, RouterOutlet, RouterLink } from '@angular/router';
-
 interface Genre {
   id: string;
   name: string;
