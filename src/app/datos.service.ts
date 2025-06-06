@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -9,8 +9,9 @@ import { Observable } from 'rxjs';
 export class DatosService {
   url: string = "http://localhost:80/kai/"
   private apiUrl = 'http://localhost:80/kai/';
+    private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+
 
   obtenerLibros() {
     return this.http.get(`${this.url}obtenerLibros.php`);

@@ -363,7 +363,7 @@ export class RegisterComponent implements OnInit, AfterViewInit, OnDestroy {
   submit() {
     if (this.formularioRegistro.valid) {
       let { usuario, passw, email } = this.formularioRegistro.value;
-      this.registro.registro(usuario, passw, email).subscribe(
+      this.registro.registro(usuario, email, passw).subscribe(
         (response: any) => {
           if (response.success) {
             console.log('Registro exitoso', response.message);
