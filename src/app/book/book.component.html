@@ -1,0 +1,33 @@
+<h1 class="gradient-text">Kai Shelves</h1>
+<div class="menu">
+  <a routerLink="">Inicio</a>
+  <a routerLink="libros">Libros</a>
+  <a routerLink="lista">Leidos</a>
+</div>
+<div>
+  <button routerLink="login">Login</button>
+</div>
+
+<router-outlet></router-outlet>
+
+@if (mostrar) {
+<h2>Catálogo de libros</h2>
+@for (libro of libros; track libro.titulo) {
+<div class="libro-card">
+  <h3>{{ libro.titulo }}</h3>
+  @defer (on hover){
+
+  @for(imagen of imagen; track $index){
+  <img src="{{imagen}}.jpg" height="100em">
+  }
+  }@placeholder {
+  <h2 align="center"> _ </h2>
+  }
+  <p><strong>Autor:</strong> {{ libro.autor }}</p>
+  <button (click)="cambioDetalles(libro)">Ver detalles</button>
+</div>
+}
+@empty {
+<p>No hay libros disponibles.</p>
+}
+}

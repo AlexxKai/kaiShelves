@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { LibrosComponent } from './libros/libros.component';
-import { DetallesComponent } from './libros/detalles/detalles.component';
 import { ErrorComponent } from './error/error.component';
 import { ListaComponent } from './lista/lista.component';
 import { RegisterComponent } from './register/register.component';
 import { LibraryComponent } from './library/library.component';
+import { BookComponent } from './book/book.component';
+import { BookDetailsComponent } from './book-details/book-details.component';
 
 
 export const routes: Routes = [
@@ -13,13 +13,12 @@ export const routes: Routes = [
         component: LibraryComponent
     },
     {
-        path: 'libros',
-        component: LibrosComponent,
-        children: [
-            {
-                path: 'detalles',
-                component: DetallesComponent
-            }]
+        path: 'books',
+        component: BookComponent,
+    },
+    {
+        path: 'bookDetails',
+        component: BookDetailsComponent,
     },
     {
         path: 'register',
