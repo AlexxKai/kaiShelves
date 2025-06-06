@@ -1,9 +1,14 @@
+<!-- Contenedor principal de la biblioteca y entorno 3D -->
 <div class="library-container">
+
+    <!-- Contenedor para el canvas de Three.js (escena 3D) -->
     <div #threeContainer class="three-container"></div>
 
+    <!-- Panel de navegación lateral con botones para moverse por distintas zonas/rutas -->
     <div class="navigation-panel">
         <h2 class="panel-title">Kai Shelves</h2>
         <div class="navigation-buttons">
+            <!-- Botones generados dinámicamente para cada sección de navegación -->
             @for (section of navigationSections; track section.id) {
             <button (click)="navigateToSection(section.id)"
                 [class]="'nav-button ' + (currentSection() === section.id ? 'active' : '')">
@@ -13,12 +18,14 @@
         </div>
     </div>
 
+    <!-- Panel de controles con instrucciones de uso -->
     <div class="controls-panel">
         <p class="controls-text">
             Move mouse to move around<br />
         </p>
     </div>
 
+    <!-- Panel informativo que muestra la sección actual seleccionada -->
     <div class="info-panel">
         <div class="info-item">
             <span class="info-label">Current section:</span>
@@ -26,31 +33,33 @@
         </div>
     </div>
 
+    <!-- Panel superior/derecho para acceso rápido a login y registro -->
     <div class="login-panel">
         <button class="login-button" (click)="openLogin()">Login</button>
         <button class="register-button" (click)="openRegister()">Register</button>
     </div>
 
-    <!-- Modal de Login -->
+    <!-- Modal de Login: aparece cuando showLogin() es true -->
     @if (showLogin()) {
     <div class="modal-overlay" (click)="closeLogin()">
+        <!-- Contenido del modal de login; el click interior no cierra el modal -->
         <div class="modal-content" (click)="$event.stopPropagation()">
             <h3 class="modal-title">Iniciar Sesión</h3>
             <button class="modal-button close-button" (click)="closeLogin()">X</button>
+            <!-- Formulario reactivo de login -->
             <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
                 <div class="mb-3">
-                    <label for="usuario" class="form-label">Correo electrónico o usuario:</label>
                     <input type="text" id="usuario" class="form-control" formControlName="usuario"
-                        placeholder="Email o usuario" required>
+                        placeholder="User or email" required>
                 </div>
                 <div class="mb-3">
-                    <label for="passw" class="form-label">Ingrese su contraseña:</label>
-                    <input type="password" class="form-control" id="passw" formControlName="passw" placeholder="passw"
-                        required>
+                    <input type="password" class="form-control" id="pwd" formControlName="passw"
+                        placeholder="Password" required>
+                    <input type="checkbox" onclick="pwd.type=this.checked?'text':'password'">
                 </div>
-                <button class="modal-button" type="submit" [disabled]="!loginForm.valid">Iniciar
-                    sesión</button><!-- class="btn btn-info" -->
+                <button class="modal-button" type="submit" [disabled]="!loginForm.valid">Iniciar sesión</button>
             </form>
+            <!-- Opción para cambiar al formulario de registro -->
             <div class="switch-form">
                 ¿No tienes cuenta?
                 <button class="link-button" (click)="openRegister()">Regístrate aquí</button>
@@ -59,31 +68,28 @@
     </div>
     }
 
+    <!-- Modal de Registro: aparece cuando showRegister() es true -->
     @if (showRegister()) {
     <div class="modal-overlay" (click)="closeRegister()">
+        <!-- Contenido del modal de registro; el click interior no cierra el modal -->
         <div class="modal-content" (click)="$event.stopPropagation()">
             <h3 class="modal-title">Regístrate</h3>
             <button class="modal-button close-button" (click)="closeRegister()">X</button>
+            <!-- Formulario reactivo de registro -->
             <form [formGroup]="formularioRegistro" (ngSubmit)="submit()">
                 <div class="mb-3">
-                    <label for="identifier" class="form-label">Nombre de usuario:</label>
-                    <input type="text" formControlName="usuario" required placeholder="nombre de usuario">
-                    @if(this.formularioRegistro.get('usuario')?.errors?.['required']) {
-                    <span> *</span>
-                    }
+                    <input type="text" formControlName="usuario" required placeholder="User">
+                    <!-- Validaciones visuales para usuario -->
                     @if(this.formularioRegistro.get('usuario')?.errors?.['minlength']) {
                     <br>
-                    <p class="mensaje">(Debe tener como mínimo 3 caracteres)</p>
+                    <p class="mensaje">(Must have at least 3 characters)</p>
                     }
                 </div>
 
                 <div class="mb-3">
-                    <label for="email" class="form-label">Ingrese su email:</label>
+                    <input type="text" formControlName="email" placeholder="Email">
 
-                    <input type="text" formControlName="email" placeholder="email">
-                    @if(this.formularioRegistro.get('email')?.errors?.['required']) {
-                    <span> *</span>
-                    }
+                    <!-- Visual validations for email -->
                     @if(this.formularioRegistro.get('email')?.errors?.['email']) {
                     <br>
                     <p class="mensaje">(El email no es válido)</p>
@@ -91,27 +97,31 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="passw" class="form-label">Ingrese su passw:</label>
-                    <input type="password" formControlName="passw" placeholder="passw">
-                    @if(this.formularioRegistro.get('passw')?.errors?.['required']) {
-                    <span> *</span>
-                    }
+                    <input type="password" id="pwd" formControlName="passw" placeholder="Password">
+                    <input type="checkbox" onclick="pwd.type=this.checked?'text':'password'">
+
+                    <!-- Visual validations for password -->
                     @if(this.formularioRegistro.get('passw')?.errors?.['comprobar']) {
-                    <br>
-                    <p class="mensaje">(Mínimo 8 caracteres, de los cuales un número y una mayúscula)</p>
+                    <p class="mensaje">(Minimum 8 characters, including one number and one capital letter)</p>
                     }
                 </div>
 
                 <button class="modal-button" type="submit" [disabled]="formularioRegistro.invalid">Confirmar</button>
                 <button class="modal-button" type="reset" (click)="reset()">Borrar</button>
-
             </form>
+
+            <!-- Log result message -->
             <div class="resultado">{{resultado}}</div>
+
+            <!-- Option to switch to login form -->
             <div class="switch-form">
-                ¿Ya tienes cuenta?
-                <button class="link-button" (click)="openLogin()">Inicia sesión aquí</button>
+                Already have an account?
+                <button class="link-button" (click)="openLogin()">Login here</button>
             </div>
         </div>
     </div>
     }
+
+    <!-- Salida de rutas Angular (para cargar componentes según la ruta) -->
     <router-outlet />
+</div>
