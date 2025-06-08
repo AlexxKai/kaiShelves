@@ -52,13 +52,4 @@ export class BookComponent implements OnInit{
         paginas: libro.paginas,      }
     ]);
   }
-  
-
-  // mostrar_boton() {
-  //   this.mostrar = true;
-  // }
-
-  // ocultar_boton() {
-  //   this.mostrar = false;
-  // }
 }

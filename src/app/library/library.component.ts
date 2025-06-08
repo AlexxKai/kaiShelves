@@ -45,7 +45,7 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
   private animationFrameId!: number;
 
   readonly navigationSections: NavigationSection[] = [
-    { id: 'inicio', name: 'Inicio', icon: '🏠' },
+    { id: 'inicio', name: 'Home', icon: '🏠' },
     { id: 'register', name: 'Register', icon: '📝🔑' },
     { id: 'entrance', name: 'Entrance', icon: '🚪' },
     { id: 'center', name: 'Centre', icon: '🏛️' },
@@ -63,7 +63,7 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   ngOnInit(): void {
-    console.log('🚀 Proyecto TFG de Alex Urueña: Kai Shelves');
+    console.log('🚀 TFG de Alex Urueña: Kai Shelves');
   }
 
   ngAfterViewInit(): void {
