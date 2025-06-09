@@ -2,22 +2,27 @@
   <div #threeContainer class="three-container"></div>
 
   <div class="navigation-panel">
-    <h2 class="panel-title">Virtual library</h2>
+    <h2 class="panel-title">Kai Shelves</h2>
     <div class="navigation-buttons">
       @for (section of navigationSections; track section.id) {
+      @if (
+      ((section.authOnly && datosService.isAuthenticated()) || !section.authOnly) &&
+      !(section.id === 'register' && datosService.isAuthenticated())
+      ) {
       <button (click)="navigateToSection(section.id)"
         [class]="'nav-button ' + (currentSection() === section.id ? 'active' : '')">
         {{section.icon}} {{section.name}}
       </button>
       }
+      }
     </div>
   </div>
 
   <div class="genres-panel">
-    <h3 class="panel-title">Genres by bookshelve color:</h3>
+    <h3 class="panel-title">Genres by color:</h3>
     <div class="genres-grid">
       @for (genre of genres; track genre.id) {
-      <div class="genre-item" [style.background-color]="getGenreColor(genre.color)">
+      <div class="genre-item" [style.background-color]="getGenreColor(genre.color)" (click)="selectGenre(genre.id)">
         {{genre.name}}
       </div>
       }
@@ -39,7 +44,7 @@
     <div class="modal-content" (click)="$event.stopPropagation()">
       <h3 class="modal-title">📖 Section: {{selectedGenre()}}</h3>
       <p class="modal-description">
-        Section: {{selectedGenre()}}. 
+        Section: {{selectedGenre()}}.
       </p>
       <div class="modal-buttons">
         <button class="modal-button catalog-button" (click)="showCatalog()">
@@ -56,49 +61,49 @@
   </div>
   }
 
-
   <!-- Catálogo-->
-@if (showCatalogView()) {
+  @if (showCatalogView()) {
   <div class="modal-overlay" (click)="closeCatalog()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <h3 class="modal-title">📚 Catalog: {{selectedGenre()}}</h3>
       <div class="books-container">
         @for (book of books(); track book.isbn) {
-          <div class="book-card">
-            <img [src]="book.imagen || 'assets/default-book.png'" alt="Portada">
-            <h4>{{book.titulo}}</h4>
-            <p>Author: {{book.autor}}</p>
-            <p>Year: {{book.fecha_publicacion}}</p>
-            <button (click)="showBookDetails(book)">Details</button>
-          </div>
+        <div class="book-card">
+          <img [src]="book.imagen || 'assets/default-book.png'" alt="Portada">
+          <h4>{{book.titulo}}</h4>
+          <p>Author: {{book.autor}}</p>
+          <p>Year: {{book.fecha_publicacion}}</p>
+          <button (click)="showBookDetails(book)">Details</button>
+        </div>
         }
       </div>
       <button class="modal-button close-button" (click)="closeCatalog()">Close</button>
     </div>
   </div>
-}
+  }
 
-<!-- buscador -->
-@if (showSearchView()) {
+  <!-- buscador -->
+  @if (showSearchView()) {
   <div class="modal-overlay" (click)="closeSearch()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <h3 class="modal-title">🔍 Search: {{selectedGenre()}}</h3>
-      <input type="text" #searchInput placeholder="Type book title or author..." (keyup.enter)="searchBooks(searchInput.value)">
+      <input type="text" #searchInput placeholder="Type book title or author..."
+        (keyup.enter)="searchBooks(searchInput.value)">
       <div class="books-container">
         @for (book of searchResults(); track book.isbn) {
-          <div class="book-card">
-            <img [src]="book.imagen || 'assets/default-book.png'" alt="Portada">
-            <h4>{{book.titulo}}</h4>
-            <p>Author: {{book.autor}}</p>
-            <p>Year: {{book.fecha_publicacion}}</p>
-            <button (click)="showBookDetails(book)">Details</button>
-          </div>
+        <div class="book-card">
+          <img [src]="book.imagen || 'assets/default-book.png'" alt="Portada">
+          <h4>{{book.titulo}}</h4>
+          <p>Author: {{book.autor}}</p>
+          <p>Year: {{book.fecha_publicacion}}</p>
+          <button (click)="showBookDetails(book)">Details</button>
+        </div>
         }
       </div>
       <button class="modal-button close-button" (click)="closeSearch()">Close</button>
     </div>
   </div>
-}
+  }
 
   <div class="info-panel">
     <div class="info-item">

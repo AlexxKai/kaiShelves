@@ -7,6 +7,7 @@ import { BookComponent } from './book/book.component';
 import { BookDetailsComponent } from './book-details/book-details.component';
 import { DeviceService } from './device.service';
 import { deviceGuard } from './device.guard';
+import { authGuard } from './auth.guard';
 import { LoginMovilComponent } from './login-movil/login-movil.component';
 
 export const routes: Routes = [
@@ -37,7 +38,13 @@ export const routes: Routes = [
     },
     {
         path: 'lista',
-        component: ListaComponent
+        loadComponent: () => import('./lista/lista.component').then(m => m.ListaComponent),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'profile',
+        loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent),
+        canActivate: [authGuard]
     },
     {
         path: 'error',

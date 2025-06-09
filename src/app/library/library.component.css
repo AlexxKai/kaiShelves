@@ -78,6 +78,7 @@
     top: 2.2rem;
     right: 2.2rem;
     min-width: 260px;
+    max-width: 300px;
 }
 
 .genres-grid {

@@ -15,6 +15,7 @@ interface NavigationSection {
   id: string;
   name: string;
   icon: string;
+  authOnly?: boolean;
 }
 
 @Component({
@@ -24,7 +25,7 @@ interface NavigationSection {
   styleUrl: './library.component.css'
 })
 export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
-  private datosService = inject(DatosService);
+  public datosService = inject(DatosService);
   private router = inject(Router);
 
   @ViewChild('threeContainer', { static: true }) threeContainer!: ElementRef;
@@ -45,10 +46,11 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
   private animationFrameId!: number;
 
   readonly navigationSections: NavigationSection[] = [
-    { id: 'inicio', name: 'Home', icon: '🏠' },
-    { id: 'register', name: 'Register', icon: '📝🔑' },
+    { id: 'home', name: 'Home', icon: '🏠' },
+    { id: 'profile', name: 'Profile', icon: '👤', authOnly: true },
+    { id: 'list', name: 'List', icon: '📚', authOnly: true },
+    { id: 'register', name: 'Register', icon: '📝🔑', authOnly: false },
     { id: 'entrance', name: 'Entrance', icon: '🚪' },
-    { id: 'center', name: 'Centre', icon: '🏛️' },
     { id: 'left', name: 'Left zone', icon: '⬅️' },
     { id: 'right', name: 'Right zone', icon: '➡️' }
   ];
@@ -416,8 +418,10 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Rutas a los componentes
     const routes: { [key: string]: string } = {
-      'inicio': '/',
-      'register': '/register'
+      'home': '/',
+      'register': '/register',
+      'profile': '/profile',
+      'list': '/lista'
     };
 
     if (routes[section]) {
@@ -428,7 +432,6 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
     // Movimiento de cámara
     const positions = {
       'entrance': { x: 0, y: 8, z: 25, targetX: 0, targetY: 5, targetZ: 0 },
-      'center': { x: 0, y: 12, z: 0, targetX: 0, targetY: 5, targetZ: 0 },
       'left': { x: -20, y: 8, z: 0, targetX: -10, targetY: 5, targetZ: 0 },
       'right': { x: 20, y: 8, z: 0, targetX: 10, targetY: 5, targetZ: 0 },
     };
@@ -439,7 +442,7 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private animateCameraTo(targetPos: { x: number; y: number; z: number; targetX: number; targetY: number; targetZ: number }): void {
-    const duration = 1000; 
+    const duration = 1000;
     const startPos = this.camera.position.clone();
     const startTarget = this.controls.target.clone();
     const startTime = Date.now();
@@ -447,13 +450,13 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
+
       const easeProgress = 1 - Math.pow(1 - progress, 3);
 
       this.camera.position.lerpVectors(startPos, new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z), easeProgress);
-      
+
       this.controls.target.lerpVectors(startTarget, new THREE.Vector3(targetPos.targetX, targetPos.targetY, targetPos.targetZ), easeProgress);
-      
+
       this.controls.update();
 
       if (progress < 1) {
@@ -527,4 +530,12 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
     // Implementa aquí la lógica para mostrar detalles del libro
     alert(`Book: ${book.titulo}\nAuthor: ${book.autor}\nYear: ${book.fecha_publicacion}`);
   }
+
+  selectGenre(genreId: string): void {
+  // Busca el género para obtener el nombre completo
+  const genre = this.genres.find(g => g.id === genreId);
+  this.selectedGenre.set(genre ? genre.name : genreId);
+  this.showGenreMenu.set(true);
+}
+
 }

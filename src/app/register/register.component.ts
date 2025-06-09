@@ -13,6 +13,7 @@ import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { DatosService } from '../datos.service';
 import { Validacionespropias } from '../validacionespropias';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface NavigationSection {
   id: string;
@@ -415,22 +416,23 @@ export class RegisterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   submitLogin() {
-    if (this.loginForm.valid) {
-      const { usuario, passw } = this.loginForm.value;
-      this.login.login(usuario, passw).subscribe(
-        (response: any) => {
-          if (response.mensaje === 'ok') {
-            console.log('Login exitoso', response.datos);
-            localStorage.setItem('usuario', usuario)
-            this.router.navigate(['']);
-          } else {
-            console.log('Login fallido');
-          }
-        },
-        (error) => {
-          console.error('Error en la solicitud', error);
+  if (this.loginForm.valid) {
+    const { usuario, passw } = this.loginForm.value;
+    this.login.login(usuario, passw).subscribe(
+      (response: any) => {
+        if (response.mensaje === 'ok') {
+          console.log('Login exitoso', response.datos);
+          localStorage.setItem('usuario', usuario)
+          this.router.navigate(['']);
+        } else {
+          console.log('Login fallido');
         }
-      );
-    }
+      },
+      // Especificar el tipo del error
+      (error: HttpErrorResponse) => { // <-- Aquí el cambio
+        console.error('Error en la solicitud', error);
+      }
+    );
   }
+}
 }
