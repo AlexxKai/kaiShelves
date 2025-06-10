@@ -10,10 +10,15 @@
     }
   </nav>
 
-  <h2 class="section-title">Mis libros leídos</h2>
+  <h2 class="gradient-text" zº>Mis libros leídos</h2>
 
   @if (loading()) {
-  <div class="loading">Cargando...</div>
+  <div class="loading">Cargando lista...</div>
+  } @else if (error()) {
+  <div class="error-message">
+    {{ error() }}
+    <button (click)="cargarLista()">Reintentar</button>
+  </div>
   } @else {
   @if (libros().length > 0) {
   <div class="books-grid">
@@ -25,6 +30,23 @@
           @for (star of [1,2,3,4,5]; track star) {
           <span class="star" [class.filled]="star <= libro.puntuacion">★</span>
           }
+
+          @if(libroEditando() !== libro.isbn){
+          <button class="edit-rating-btn" (click)="libroEditando.set(libro.isbn)">Modificar puntuación</button>
+          }
+
+          @if(libroEditando() === libro.isbn){
+          <select [(ngModel)]="libro.puntuacion" (change)="guardarPuntuacion(libro)" (blur)="libroEditando.set(null)">
+            <option [value]="1">1 ★</option>
+            <option [value]="2">2 ★★</option>
+            <option [value]="3">3 ★★★</option>
+            <option [value]="4">4 ★★★★</option>
+            <option [value]="5">5 ★★★★★</option>
+          </select>
+          }
+          @if(libroEditando() === libro.isbn){
+          <button class="edit-rating-btn" (click)="libroEditando.set(null)">Cancelar</button>
+          }
         </div>
       </div>
       <p class="book-author">{{ libro.autor }}</p>
@@ -33,6 +55,7 @@
           📅 {{ libro.fecha_leido | date:'dd/MM/yyyy' }}
         </span>
       </div>
+      <button class="delete-read-btn" (click)="eliminarDeLeidos(libro)">Eliminar de leídos</button>
     </div>
     }
   </div>
@@ -41,6 +64,6 @@
     <p>No tienes libros registrados como leídos.</p>
     <a routerLink="/catalog" class="explore-btn">Explorar catálogo</a>
   </div>
-  }}
+  }
+  }
 </div>
-

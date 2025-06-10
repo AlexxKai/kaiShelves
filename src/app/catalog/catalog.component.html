@@ -1,0 +1,40 @@
+<div class="container">
+    <h1 class="gradient-text">Kai Shelves</h1>
+
+    <nav class="menu">
+        <a routerLink="/" class="nav-link">Home</a>
+        <a routerLink="/catalog" class="nav-link">Catalog</a>
+        <a routerLink="/lista" class="nav-link active">Read</a>
+        @if (datosService.isAuthenticated()) {
+        <button class="logout-btn" (click)="datosService.logout()">Logout</button>
+        }
+    </nav>
+
+
+    <h1 class="gradient-text">Catalog</h1>
+
+    @if (loading()) {
+    <div class="loading">Cargando catálogo...</div>
+    } @else {
+        
+    @if (catalogo().length > 0) {
+    <div class="books-grid">
+        @for (libro of catalogo(); track libro) {
+        <div class="book-card">
+            <div class="book-header">
+                <h3 class="book-title">{{ libro.titulo }}</h3>
+                <p class="book-author">{{ libro.autor }}</p>
+            </div>
+            <div class="book-meta">
+                <span class="release-date">📅 {{ libro.fecha_publicacion | date:'dd/MM/yyyy' }}</span>
+            </div>
+        </div>
+        }
+    </div>
+    } @else {
+    <div class="empty-state">
+        <p>No hay libros disponibles en el catálogo.</p>
+    </div>
+    }
+    }
+</div>

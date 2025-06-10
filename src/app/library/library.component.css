@@ -325,3 +325,43 @@
 .books-container::-webkit-scrollbar-corner {
   background: #f0f0f0;
 }
+
+.book-details-content {
+  display: flex;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.book-details-image {
+  width: 180px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(176, 141, 87, 0.2);
+}
+
+.book-details-info {
+  flex: 1;
+}
+
+.book-details-info p {
+  margin: 0.7rem 0;
+  font-size: 1.1rem;
+  color: #7a5c2e;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .book-details-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  .book-details-image {
+    width: 120px;
+  }
+}

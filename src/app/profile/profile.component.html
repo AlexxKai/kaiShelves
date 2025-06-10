@@ -1,5 +1,17 @@
-<div class="profile-container">
-  <h2>Perfil de {{ datosService.currentUser()?.usuario }}</h2>
-  <p>Email: {{ datosService.currentUser()?.email }}</p>
+<div class="container">
+  <h1 class="gradient-text">Kai Shelves</h1>
+
+  <nav class="menu">
+    <a routerLink="/" class="nav-link">Home</a>
+    <a routerLink="/catalog" class="nav-link">Catalog</a>
+    <a routerLink="/lista" class="nav-link active">Read</a>
+    @if (datosService.isAuthenticated()) {
+    <button class="logout-btn" (click)="datosService.logout()">Logout</button>
+    }
+  </nav>
+
+  <div class="profile-container">
+    <h2>Perfil de {{ datosService.currentUser()?.usuario }}</h2>
+    <p>Email: {{ datosService.currentUser()?.email }}</p>
+  </div>
 </div>
-<button (click)="logout()">Cerrar sesión</button>

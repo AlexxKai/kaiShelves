@@ -4,6 +4,11 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { DatosService } from '../datos.service';
 import { Router, RouterOutlet, RouterLink } from '@angular/router';
+import { formatDate } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+
+
 interface Genre {
   id: string;
   name: string;
@@ -30,6 +35,9 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('threeContainer', { static: true }) threeContainer!: ElementRef;
   controls!: OrbitControls;
+
+
+  constructor(private http: HttpClient) { }
 
   currentSection = signal<string>('entrance');
   selectedGenre = signal<string>('');
@@ -525,17 +533,104 @@ export class LibraryComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  // Método para mostrar detalles de un libro (opcional)
+  // Señales para el modal de detalles
+  selectedBook = signal<any>(null);
+  showBookDetailsView = signal(false);
+
+  // Método para abrir el modal de detalles
   showBookDetails(book: any): void {
-    // Implementa aquí la lógica para mostrar detalles del libro
-    alert(`Book: ${book.titulo}\nAuthor: ${book.autor}\nYear: ${book.fecha_publicacion}`);
+    this.selectedBook.set(book);
+    this.showBookDetailsView.set(true);
+  }
+
+  // Método para cerrar el modal de detalles
+  closeBookDetails(): void {
+    this.showBookDetailsView.set(false);
   }
 
   selectGenre(genreId: string): void {
-  // Busca el género para obtener el nombre completo
-  const genre = this.genres.find(g => g.id === genreId);
-  this.selectedGenre.set(genre ? genre.name : genreId);
-  this.showGenreMenu.set(true);
-}
+    const genre = this.genres.find(g => g.id === genreId);
+    this.selectedGenre.set(genre ? genre.name : genreId);
+    this.showGenreMenu.set(true);
+  }
+
+  marcarComoLeido(book: any): void {
+    const usuarioStorage = localStorage.getItem('usuario');
+    if (!usuarioStorage) {
+      alert('No has iniciado sesión.');
+      return;
+    }
+
+    let usuarioNombre: string;
+    try {
+      const usuarioObj = JSON.parse(usuarioStorage);
+      usuarioNombre = usuarioObj.usuario || usuarioObj.nombre || usuarioObj;
+    } catch (e) {
+      usuarioNombre = usuarioStorage;
+    }
+
+    if (!book.isbn) {
+      console.error('El libro no tiene ISBN:', book);
+      alert('Error: El libro no tiene un ISBN válido.');
+      return;
+    }
+
+    console.log('Usuario localStorage:', usuarioStorage);
+    console.log('Usuario:', usuarioNombre);
+    console.log('Book:', book);
+    console.log('ISBN:', book.isbn);
+
+    const lectura = {
+      usuario: usuarioNombre.toString().trim(),
+      isbn: book.isbn.toString().trim(),
+      fecha: formatDate(new Date(), 'yyyy-MM-dd', 'en-US')
+    };
+
+    console.log('Datos a enviar al backend:', lectura);
+
+    this.datosService.marcarLibroComoLeido(lectura).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servidor:', response);
+        if (response.success) {
+          alert('Libro añadido a leídos.');
+        } else {
+          alert('Error: ' + response.message);
+        }
+      },
+      error: (error) => {
+        console.error('Error completo:', error);
+        console.error('Status:', error.status);
+        console.error('Error body:', error.error);
+
+        let errorMessage = 'Error al añadir libro a leídos.';
+        if (error.error && error.error.message) {
+          errorMessage += ' ' + error.error.message;
+        }
+
+        alert(errorMessage);
+      }
+    });
+  }
+
+  debugBook(book: any): void {
+    console.log('Libro:', book);
+    console.log('ISBN valor:', book.isbn);
+    console.log('Usuario en localstorage:', localStorage.getItem('usuario'));
+  }
+
+  descargarPDF(filename: string): void {
+    if (!filename) {
+      alert('No se encontró el PDF para este libro.');
+      return;
+    }
+    const pdfPath = `assets/pdf/${filename}`;
+    const link = document.createElement('a');
+    link.href = pdfPath;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
 
 }

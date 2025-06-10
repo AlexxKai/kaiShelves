@@ -13,13 +13,24 @@ export class DatosService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-
   obtenerLibros() {
     return this.http.get(`${this.url}obtenerLibros.php`);
   }
 
   obtenerLista(): Observable<any> {
-    return this.http.get(`${this.url}obtenerLista.php`, { withCredentials: true });
+    const usuario = localStorage.getItem('usuario');
+    if (!usuario) {
+      return new Observable(observer => {
+        observer.next({
+          success: false,
+          mensaje: "Usuario no autenticado",
+          libros: []
+        });
+        observer.complete();
+      });
+    }
+
+    return this.http.post<any>(`${this.url}obtenerLista.php`, { usuario }, { withCredentials: true });
   }
 
   login(usuario: string, passw: string) {
@@ -55,15 +66,20 @@ export class DatosService {
     );
   }
 
-  // Señales reactivas
   isAuthenticated = signal(false);
   currentUser = signal<any>(null);
 
   constructor() {
     const user = localStorage.getItem('usuario');
     if (user) {
-      this.isAuthenticated.set(true);
-      this.currentUser.set(JSON.parse(user));
+      try {
+        const parsedUser = JSON.parse(user);
+        this.isAuthenticated.set(true);
+        this.currentUser.set(parsedUser);
+      } catch (e) {
+        console.error('Error parsing localStorage user:', user);
+        localStorage.removeItem('usuario');
+      }
     }
   }
 
@@ -73,5 +89,27 @@ export class DatosService {
     this.currentUser.set(null);
     this.router.navigate(['/']);
   }
+
+  debugSession(): Observable<any> {
+    return this.http.get(`${this.url}debug_session.php`, { withCredentials: true });
+  }
+
+  marcarLibroComoLeido(data: any): Observable<any> {
+    return this.http.post(`${this.url}marcarLeido.php`, data, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
+  actualizarPuntuacion(isbn: string, puntuacion: number) {
+    const body = { isbn: isbn, puntuacion: puntuacion };
+    return this.http.post(`${this.url}actualizarPuntuacion.php`, body);
+  }
+
+  eliminarLibroLeido(isbn: string) {
+    return this.http.post(`${this.url}eliminarLeido.php`, { isbn });
+  }
+
 }
 

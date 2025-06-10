@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { DatosService } from '../datos.service';
-import { Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-profile',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

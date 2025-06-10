@@ -59,6 +59,11 @@ export const routes: Routes = [
         component: ErrorComponent
     },
     {
+        path: 'catalog',
+        loadComponent: () => import('./catalog/catalog.component').then(m => m.CatalogComponent)
+    },
+
+    {
         path: '**',
         redirectTo: 'error'
     }];
