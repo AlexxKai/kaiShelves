@@ -17,36 +17,44 @@ export const routes: Routes = [
         canActivate: [deviceGuard]
     },
     {
-        path: 'books',
-        loadComponent: () => import('./book/book.component').then(m => m.BookComponent)
-    },
-    {
+        // pc catalogo inicio
         path: 'library',
         loadComponent: () => import('./library/library.component').then(m => m.LibraryComponent)
     },
     {
-        path: 'bookDetails',
-        component: BookDetailsComponent,
-    },
-    {
+        // pc registro/login
         path: 'register',
         component: RegisterComponent,
     },
     {
+        // movil detalles del libro
+        path: 'bookDetails',
+        component: BookDetailsComponent,
+    },
+    {
+        // movil catalogo inicio
+        path: 'books',
+        loadComponent: () => import('./book/book.component').then(m => m.BookComponent)
+    },
+    {
+        // movil
         path: 'login',
         component: LoginMovilComponent,
     },
     {
+        // ambos
         path: 'lista',
         loadComponent: () => import('./lista/lista.component').then(m => m.ListaComponent),
         canActivate: [authGuard]
     },
     {
+        // ambos
         path: 'profile',
         loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent),
         canActivate: [authGuard]
     },
     {
+        // ambos
         path: 'error',
         component: ErrorComponent
     },

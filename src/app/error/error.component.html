@@ -1,13 +1,13 @@
 <h1 class="gradient-text">Kai Shelves</h1>
 <div class="menu">
   <a routerLink="">Home</a>
-  <a routerLink="/books">Books</a>
-  <a routerLink="/lista">Read</a>
-</div>
-<div>
-  <button routerLink="login">Login</button>
+  <a routerLink="/lista">Read list</a>
+  @if (datosService.isAuthenticated()) {
+    <button class="logout-btn" (click)="datosService.logout()">Logout</button>
+    }@else {
+    <button routerLink="/login">Login</button>}
 </div>
 
-<div>
-    <strong>Página no encontrada</strong>
+<div class="error-container">
+  <img [src]="randomImage()" alt="Imagen de error aleatoria">
 </div>

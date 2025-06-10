@@ -18,8 +18,8 @@ export class DatosService {
     return this.http.get(`${this.url}obtenerLibros.php`);
   }
 
-  obtenerLista() {
-    return this.http.get(`${this.url}obtenerLista.php`);
+  obtenerLista(): Observable<any> {
+    return this.http.get(`${this.url}obtenerLista.php`, { withCredentials: true });
   }
 
   login(usuario: string, passw: string) {
