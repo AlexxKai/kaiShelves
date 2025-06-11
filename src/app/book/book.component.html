@@ -11,11 +11,11 @@
 <h2>Book catalog</h2>
 @for (libro of libros; track libro.titulo) {
 <div class="libro-card">
-  <h3>{{ libro.titulo }}</h3>
+  <h3 class="libro-titulo">{{ libro.titulo }}</h3>
 
   @defer {
   @for(imagen of imagen; track $index){
-  <img src="{{imagen}}.jpg" height="100em">
+  <img src="assets/images/{{ libro.imagen }}" alt="{{ libro.imagen }}" height="125em">
   }}
 
   <p><strong>Author:</strong> {{ libro.autor }}</p>

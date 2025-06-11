@@ -15,7 +15,7 @@
     <p><strong>Editorial:</strong> {{ libro?.editorial }}</p>
     <p><strong>Genre:</strong> {{ libro?.genero }}</p>
     <p><strong>Pages:</strong> {{ libro?.paginas }}</p>
-    <img src="open.jpg" height="200em">
+  <img src="assets/images/{{ libro?.imagen }}" alt="{{ libro?.imagen }}" height="125em">
   </div>
   <br>
   <button (click)="volver()">Back to list</button>

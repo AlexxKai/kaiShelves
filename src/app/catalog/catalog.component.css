@@ -16,6 +16,11 @@
   text-align: center;
 }
 
+.book-title{
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
 .detalles-libro{
     padding-left: 45%;

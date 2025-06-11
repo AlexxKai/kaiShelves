@@ -69,13 +69,14 @@
       <div class="books-container">
         @for (book of books(); track book.isbn) {
         <div class="book-card">
-          <img [src]="book.imagen || 'assets/default-book.png'" alt="Portada">
+          <br>
+          <img [src]="'assets/images/' + (book.imagen || 'default-book.png')" alt="Portada">
           <h4>{{book.titulo}}</h4>
           <p>Author: {{book.autor}}</p>
-          <p>Year: {{book.fecha_publicacion}}</p>
           <button (click)="showBookDetails(book)">Details</button>
           <button (click)="descargarPDF(book.pdf)">Download PDF</button>
           <button (click)="marcarComoLeido(book)">Add to readed</button>
+          <br>
         </div>
         }
       </div>
@@ -85,35 +86,36 @@
   }
 
   <!-- Modal de detalles del libro -->
-@if (showBookDetailsView()) {
-<div class="modal-overlay" (click)="closeBookDetails()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <button class="modal-button close-button" (click)="closeBookDetails()">X</button>
-    <h3 class="modal-title">{{selectedBook().titulo}}</h3>
-    <div class="book-details-content">
-      <img [src]="selectedBook().imagen || 'assets/default-book.png'" alt="Portada" class="book-details-image">
-      <div class="book-details-info">
-        <p><strong>Autor:</strong> {{selectedBook().autor}}</p>
-        <p><strong>Editorial:</strong> {{selectedBook().editorial}}</p>
-        <p><strong>ISBN:</strong> {{selectedBook().isbn}}</p>
-        <p><strong>Fecha de publicación:</strong> {{selectedBook().fecha_publicacion}}</p>
-        <p><strong>Páginas:</strong> {{selectedBook().paginas}}</p>
+  @if (showBookDetailsView()) {
+  <div class="modal-overlay" (click)="closeBookDetails()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-button close-button" (click)="closeBookDetails()">X</button>
+      <h3 class="modal-title">{{selectedBook().titulo}}</h3>
+      <div class="book-details-content">
+        <img [src]="'assets/images/' + (selectedBook().imagen || 'default-book.png')" alt="Portada"
+          class="book-details-image">
+        <div class="book-details-info">
+          <p><strong>Autor:</strong> {{selectedBook().autor}}</p>
+          <p><strong>Editorial:</strong> {{selectedBook().editorial}}</p>
+          <p><strong>ISBN:</strong> {{selectedBook().isbn}}</p>
+          <p><strong>Fecha de publicación:</strong> {{selectedBook().fecha_publicacion}}</p>
+          <p><strong>Páginas:</strong> {{selectedBook().paginas}}</p>
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <!-- Botón para añadir a leídos (solo si está autenticado) -->
+        @if (datosService.isAuthenticated()) {
+        <button class="modal-button catalog-button" (click)="marcarComoLeido(selectedBook())">Añadir a leídos</button>
+        }
+        <!-- Botón para descargar PDF (solo si existe) -->
+        @if (selectedBook().pdf) {
+        <button class="modal-button search-button" (click)="descargarPDF(selectedBook().pdf)">Descargar PDF</button>
+        }
+        <button class="modal-button close-button" (click)="closeBookDetails()">Cerrar</button>
       </div>
     </div>
-    <div class="modal-buttons">
-      <!-- Botón para añadir a leídos (solo si está autenticado) -->
-      @if (datosService.isAuthenticated()) {
-        <button class="modal-button catalog-button" (click)="marcarComoLeido(selectedBook())">Añadir a leídos</button>
-      }
-      <!-- Botón para descargar PDF (solo si existe) -->
-      @if (selectedBook().pdf) {
-        <button class="modal-button search-button" (click)="descargarPDF(selectedBook().pdf)">Descargar PDF</button>
-      }
-      <button class="modal-button close-button" (click)="closeBookDetails()">Cerrar</button>
-    </div>
   </div>
-</div>
-}
+  }
 
   <!-- buscador -->
   @if (showSearchView()) {

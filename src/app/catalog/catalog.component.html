@@ -20,12 +20,15 @@
     @if (catalogo().length > 0) {
     <div class="books-grid">
         @for (libro of catalogo(); track libro) {
-        <div class="book-card">
+        <div class="libro-card">
             <div class="book-header">
                 <h3 class="book-title">{{ libro.titulo }}</h3>
                 <p class="book-author">{{ libro.autor }}</p>
             </div>
             <div class="book-meta">
+                <img src="assets/images/{{ libro.imagen }}" alt="{{ libro.imagen }}" height="150" width="100">
+
+                <br>
                 <span class="release-date">📅 {{ libro.fecha_publicacion | date:'dd/MM/yyyy' }}</span>
             </div>
         </div>

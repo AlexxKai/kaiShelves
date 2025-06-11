@@ -44,7 +44,7 @@
     <div class="modal-overlay" (click)="closeLogin()">
         <!-- Contenido del modal de login; el click interior no cierra el modal -->
         <div class="modal-content" (click)="$event.stopPropagation()">
-            <h3 class="modal-title">Iniciar Sesión</h3>
+            <h3 class="modal-title">Login</h3>
             <button class="modal-button close-button" (click)="closeLogin()">X</button>
             <!-- Formulario reactivo de login -->
             <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
@@ -53,16 +53,16 @@
                         placeholder="User or email" required>
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" id="pwd" formControlName="passw"
-                        placeholder="Password" required>
+                    <input type="password" class="form-control" id="pwd" formControlName="passw" placeholder="Password"
+                        required>
                     <input type="checkbox" onclick="pwd.type=this.checked?'text':'password'">
                 </div>
-                <button class="modal-button" type="submit" [disabled]="!loginForm.valid">Iniciar sesión</button>
+                <button class="modal-button" type="submit" [disabled]="!loginForm.valid">Login</button>
             </form>
             <!-- Opción para cambiar al formulario de registro -->
             <div class="switch-form">
-                ¿No tienes cuenta?
-                <button class="link-button" (click)="openRegister()">Regístrate aquí</button>
+                Don't have an account?
+                <button class="link-button" (click)="openRegister()">Register here</button>
             </div>
         </div>
     </div>
@@ -73,7 +73,7 @@
     <div class="modal-overlay" (click)="closeRegister()">
         <!-- Contenido del modal de registro; el click interior no cierra el modal -->
         <div class="modal-content" (click)="$event.stopPropagation()">
-            <h3 class="modal-title">Regístrate</h3>
+            <h3 class="modal-title">Register</h3>
             <button class="modal-button close-button" (click)="closeRegister()">X</button>
             <!-- Formulario reactivo de registro -->
             <form [formGroup]="formularioRegistro" (ngSubmit)="submit()">
@@ -92,7 +92,7 @@
                     <!-- Visual validations for email -->
                     @if(this.formularioRegistro.get('email')?.errors?.['email']) {
                     <br>
-                    <p class="mensaje">(El email no es válido)</p>
+                    <p class="mensaje">(The email is invalid)</p>
                     }
                 </div>
 
@@ -106,8 +106,8 @@
                     }
                 </div>
 
-                <button class="modal-button" type="submit" [disabled]="formularioRegistro.invalid">Confirmar</button>
-                <button class="modal-button" type="reset" (click)="reset()">Borrar</button>
+                <button class="modal-button" type="submit" [disabled]="formularioRegistro.invalid">Confirm</button>
+                <button class="modal-button" type="reset" (click)="reset()">Delete</button>
             </form>
 
             <!-- Log result message -->
